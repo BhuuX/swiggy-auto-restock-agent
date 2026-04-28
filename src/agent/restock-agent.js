@@ -77,7 +77,7 @@ async function executeTool(name, input) {
 
 async function runAgentLoop(userMessage, maxIterations = 10) {
   const model = genAI.getGenerativeModel({
-    model: 'gemini-2.5-flash',
+    model: 'gemini-1.5-flash',
     systemInstruction: RESTOCK_SYSTEM_PROMPT,
     tools: TOOLS,
   });
@@ -90,6 +90,8 @@ async function runAgentLoop(userMessage, maxIterations = 10) {
   let result = response.response;
 
   for (let i = 0; i < maxIterations; i++) {
+    // Add a small delay to avoid hitting rate limits on the free tier
+    await new Promise(resolve => setTimeout(resolve, 2000));
     const candidate = result.candidates?.[0];
     if (!candidate) break;
 
