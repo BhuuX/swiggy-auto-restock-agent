@@ -77,7 +77,7 @@ async function executeTool(name, input) {
 
 async function runAgentLoop(userMessage, maxIterations = 10) {
   const model = genAI.getGenerativeModel({
-    model: 'gemini-2.0-flash',
+    model: 'gemini-2.5-flash',
     systemInstruction: RESTOCK_SYSTEM_PROMPT,
     tools: TOOLS,
   });
