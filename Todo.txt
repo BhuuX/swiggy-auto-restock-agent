@@ -1,0 +1,324 @@
+OAuth + session storage
+get_addresses working
+get_orders + your_go_to_items ingestion
+local recurring-item model
+Claude structured restock recommendation
+search_products + preferred variant resolution
+get_cart + safe merge
+update_cart
+checkout review screen
+explicit confirmation + checkout
+track_order
+mock/staging demo video
+What will probably make a project look “first place”
+
+It solves a painfully real consumer problem.
+It uses Swiggy for actual transaction completion, not just recommendations.
+It feels safe and trustworthy.
+It has a clear product story, not just code.
+It shows depth: memory, preferences, prediction, alternatives, budget, and polished UX.
+It respects Swiggy’s actual agent rules, especially around carting, confirmation, checkout, auth, and retries.
+The winning product angle
+A strong angle is not “AI restocks groceries.”
+A stronger angle is:
+
+Household Auto-Restock Copilot for Indian urban families
+
+Why this is stronger:
+
+It is closer to a real consumer outcome.
+It fits Instamart’s quick-commerce nature.
+It naturally demonstrates repeat use, memory, and transactions.
+It lets you show multiple capabilities:
+learning patterns
+smart reminders
+one-tap approval
+substitutions
+budget awareness
+urgent vs non-urgent restocks
+That is much stronger than a single prompt box with “reorder eggs.”
+
+What your project must have at minimum
+These are table stakes if you want to look serious.
+
+Real Swiggy flow coverage
+get_addresses
+get_orders
+search_products
+update_cart
+get_cart
+checkout
+track_order
+Source: Instamart reference
+
+Safe checkout behavior
+show address
+show items
+show total
+show allowed payment method(s)
+ask explicit confirmation before checkout
+Swiggy makes this mandatory: checkout
+
+Persistent user memory
+favorite brands
+preferred pack size
+reorder interval
+last ordered date
+household notes like “2 kids” or “weekly breakfast stock”
+preferred substitutes
+Without this, it looks like a chatbot, not an agent.
+
+Cart merge logic
+update_cart replaces the full cart, so you must fetch current cart and merge carefully
+Source: update_cart
+
+Claude structured planning
+Claude should not output loose prose. It should return structured fields like:
+item
+reason
+urgency
+recommended_quantity
+preferred_variant
+fallback_variant
+confidence
+Relevant docs:
+
+Claude API overview
+Structured outputs
+Strict tool use
+What will make it stand out above other entries
+This is where “first place” starts.
+
+A pantry-style household model
+Don’t just read order history. Build a model like:
+staples: milk, bread, eggs
+weekly: fruits, curd, vegetables
+monthly: detergent, tissues, cleaners
+emergency items: diapers, medicine basics, pet food
+This makes the agent feel like it understands the home.
+
+Predicted depletion, not just “last ordered 7 days ago”
+Your logic should combine:
+order recency
+usual quantity
+frequency
+item class
+user household size
+upcoming events
+day-of-week patterns
+Example:
+
+milk every 3 days
+bread every 5 days
+detergent every 28 days
+bananas only on weekdays
+That looks much smarter than a simple cron rule.
+
+Explainable decisions
+Every recommendation should have a human reason:
+“You usually buy 2 liters of milk every 3 days. Last purchase was 4 days ago.”
+“Your monthly detergent cycle suggests you may run out this week.”
+“You often pair bread with eggs and milk on Sunday restocks.”
+That creates trust.
+
+Substitution intelligence
+This is a huge differentiator.
+When preferred item is unavailable:
+choose same brand smaller pack
+choose same quantity different brand
+ask user only when confidence is low
+This makes the agent resilient and practical.
+
+Budget-aware restocking
+Add:
+monthly grocery budget
+soft cap
+“urgent only” mode
+“save money” mode
+“brand-loyal” mode
+Then the agent can say:
+
+“To stay under your Rs 800 quick-restock budget, I removed non-urgent snacks.”
+“I found a lower-cost alternative for detergent.”
+That feels product-grade.
+
+Schedule and mode controls
+Let the user choose:
+auto-suggest only
+build cart automatically
+ask before checkout
+weekly restock day
+urgent replenishment threshold
+do-not-order list
+This makes it feel personalized and safe.
+
+A beautiful approval flow
+Not just raw JSON or tool output.
+Use a polished review card:
+item
+reason
+confidence
+quantity
+price
+alternative option
+edit button
+approve/reject
+Swiggy’s build docs explicitly mention widgets and surface-specific design, which means UI polish matters: Build docs
+
+Multi-turn continuity
+If user says:
+“Replace Amul with Nandini”
+“Remove bananas”
+“Checkout tomorrow morning”
+the agent should keep context cleanly.
+Swiggy explicitly calls out multi-turn cart state as an important pattern: Build docs
+
+Voice-ready experience
+Even if your main UI is chat/web, showing a voice demo is a power move.
+Swiggy specifically documents voice vs chat as separate response contracts. If you show both, it signals maturity: Build docs
+
+A strong “demo moment”
+The best entries have one memorable reveal.
+Examples:
+
+“Your Sunday breakfast essentials are likely running low. I prepared a cart in 4 seconds.”
+“You are over budget. I optimized the cart and saved Rs 143.”
+“Your preferred detergent is out of stock. I found the closest substitute.”
+“Your cart spans 2 stores; I split it automatically.”
+That is what people remember.
+
+The strongest feature set for your project
+If I were optimizing for “best in competition,” I would build this exact feature list:
+
+Household onboarding
+family size
+dietary preferences
+common staples
+budget mode
+preferred brands
+Learning engine
+parse past orders
+classify items by cadence
+detect recurring patterns
+infer urgency
+Recommendation engine
+urgent
+soon
+optional
+seasonal
+paired items
+Variant resolver
+preferred variant memory
+fallback logic
+substitution ranking
+Cart orchestrator
+merge with existing cart
+avoid destructive overwrite
+show price impact
+Approval UI
+reasons
+confidence
+edit controls
+remove item
+accept all
+partial accept
+Safe checkout
+address summary
+payment method summary
+explicit confirmation
+below-₹1000 check
+Swiggy’s current checkout guidance includes the ₹1000 limit and explicit confirmation rules: checkout
+
+Tracking and post-order loop
+order placed
+track status
+update household memory after order
+What judges / reviewers are likely to respect most
+Again, this is inferred, but strongly.
+
+Consumer trust
+Swiggy’s docs repeatedly emphasize agents that don’t surprise users. If your agent confirms, explains, and behaves predictably, that is a major plus: Access & onboarding
+
+Technical maturity
+If you demonstrate:
+
+OAuth working
+401 recovery
+non-idempotent checkout handling
+session logging
+retry discipline
+you instantly look more serious than most demos.
+
+Source: Authenticate, Ship to production
+
+Product thinking
+The best projects feel like something Swiggy could actually feature, partner with, or hire for. Swiggy literally says standout projects can get featured and that they hire from the program: Builders homepage
+
+Depth, not gimmicks
+A clean, reliable household restock copilot beats a flashy but shallow “multi-agent marketplace brain.”
+
+What will make your demo weak
+Avoid these if you want to compete seriously.
+
+Pure chatbot UI with no structured review
+No stored preferences
+No variant handling
+No cart merge safety
+No explanations for recommendations
+No budget or urgency concept
+Blind checkout
+Fake “AI magic” without real Swiggy transaction flow
+No polished video
+No clear user persona
+How to present it so it feels premium
+Your submission should not feel like “here is my app.”
+It should feel like a mini product launch.
+
+Use this structure in the demo:
+
+Problem
+households forget staples
+repeated low-value grocery decisions are annoying
+Product
+AI household restock copilot for Instamart
+Why it’s different
+learns from history
+predicts depletion
+resolves variants
+respects budget
+asks before checkout
+Live flow
+connect account
+detect low-stock needs
+prepare cart
+user edits
+confirm checkout
+order tracking
+Why it matters to Swiggy
+repeat usage
+higher convenience
+agentic commerce
+deeper retention
+real transactional outcome
+That last point is important because Swiggy is clearly positioning Builders Club around AI-native commerce applications that take real-world actions, not just chat wrappers: AWS launch announcement
+
+My blunt recommendation if you want the strongest possible entry
+Don’t build “an AI grocery bot.”
+Build:
+
+Swiggy Instamart Household Restock Copilot
+
+learns household routines
+predicts low-stock staples
+builds a safe, editable cart
+optimizes for budget and brand preference
+handles substitutes intelligently
+checks out only with confirmation
+tracks the resulting order
+Your best next moves
+
+Lock the exact v1 user story.
+Decide your differentiators now: budget mode, substitutions, pantry memory, or voice.
+Design the demo before coding the whole backend.
+Build the approval and review UI early.
+Make the video feel like a product pitch, not a dev log.
